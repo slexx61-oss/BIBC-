@@ -52,9 +52,7 @@ function Contact() {
       message
     };
 
-    //Timeout setup 
-    const controller = new AbortController();
-    setTimeout (() => controller.abort(), 8000);
+  
 
     try {
       //Send POST request to backend server 
@@ -70,7 +68,7 @@ function Contact() {
         //Convert JS object to JSON string
         body: JSON.stringify(formData),
         //Attaches timeout 
-        signal:controller.signal 
+        
       });
 
       if(response.ok) {
