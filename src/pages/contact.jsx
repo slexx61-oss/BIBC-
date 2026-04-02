@@ -52,6 +52,10 @@ function Contact() {
       message
     };
 
+    //Timeout setup 
+    const controller = new AbortController();
+    setTimeout (() => controller.abort(), 8000);
+
     try {
       //Send POST request to backend server 
       const response = await fetch ("https://bibc-backend.onrender.com/contact",{
@@ -64,23 +68,23 @@ function Contact() {
         },
 
         //Convert JS object to JSON string
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        //Attaches timeout 
+        signal:controller.signal 
       });
- 
-      //Const server response into JS object
-      const data = await response.json();
 
-      //If server confirms success 
-      if (data.success){
-        //Show confirmation message
+      if(response.ok) {
         setSubmitted(true);
-        //Clear form inputs
         setName("");
-        setEmail ("");
-        setMessage ("");
-        
+        setEmail("");
+        setMessage("");
+      } else{
+        setError ("Server error");
       }
-    }
+ 
+      
+    }//Const server response into JS object
+      
 
       catch (error){
         //If something fails, print error 
