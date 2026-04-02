@@ -54,7 +54,7 @@ function Contact() {
 
     try {
       //Send POST request to backend server 
-      const response = await fetch ("http://localhost:5000/contact",{
+      const response = await fetch ("https://bibc-backend.onrender.com/",{
 
         //HTTP method
         method: "POST",

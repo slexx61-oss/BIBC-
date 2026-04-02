@@ -22,9 +22,10 @@ const transporter = nodemailer.createTransport({
     service:"gmail",
 
     //Authentication details 
+    //Production must use env variables 
     auth:{
-        user:"s.lexx61@gmail.com",
-        pass:"rqszzqmojzblqmon"
+        user:process.env.EMAIL_USER,
+        pass:process.env.EMAIL_PASS
     }
 });
 
