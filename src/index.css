@@ -1,68 +1,669 @@
+/* ============================================================
+   BIBC — Microsoft Windows 2000 Style
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Tahoma:wght@400;700&display=swap');
+
+/* CSS Variables – Win2k palette */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --win-bg:        #d4d0c8;  /* classic system grey */
+  --win-dark:      #808080;
+  --win-darker:    #404040;
+  --win-light:     #ffffff;
+  --win-title:     #000080;  /* deep navy title-bar */
+  --win-title-end: #1084d0;  /* title-bar gradient end */
+  --win-text:      #000000;
+  --win-link:      #000080;
+  --win-yellow:    #f5c04a;
+  --win-inset-bg:  #ffffff;
+  --win-groupbox:  #d4d0c8;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+  font-size: 11px;
+  color: var(--win-text);
+  background-color: var(--win-bg);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  background-color: var(--win-bg);
+  color: var(--win-text);
+  font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+}
+
+#root {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* ── Raised / Sunken border helpers ── */
+.raised {
+  border-top:    2px solid var(--win-light);
+  border-left:   2px solid var(--win-light);
+  border-right:  2px solid var(--win-dark);
+  border-bottom: 2px solid var(--win-dark);
+}
+.sunken {
+  border-top:    2px solid var(--win-dark);
+  border-left:   2px solid var(--win-dark);
+  border-right:  2px solid var(--win-light);
+  border-bottom: 2px solid var(--win-light);
 }
 
-button {
-  border-radius: 8px;
+/* ── Outer thick bevel ── */
+.win-panel {
+  background: var(--win-bg);
+  border-top:    2px solid var(--win-light);
+  border-left:   2px solid var(--win-light);
+  border-right:  2px solid var(--win-darker);
+  border-bottom: 2px solid var(--win-darker);
+  outline: 1px solid var(--win-dark);
+}
+
+/* ── Global headings ── */
+h1, h2, h3, h4 {
+  font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+  font-weight: 700;
+  color: var(--win-text);
+  line-height: 1.3;
+}
+
+p { font-size: 11px; line-height: 1.6; }
+
+a {
+  color: var(--win-link);
+  text-decoration: underline;
+  font-weight: 400;
+}
+a:hover { color: #0000ee; }
+
+/* ── Container ── */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 12px;
+  flex: 1;
+}
+
+/* ============================================================
+   NAVBAR  — Windows 2000 menu bar
+   ============================================================ */
+.navbar {
+  background: var(--win-bg);
+  border-bottom: 2px solid var(--win-dark);
+  border-top:    2px solid var(--win-light);
+  padding: 0;
+}
+
+.navbar-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: stretch;
+}
+
+/* Title-bar strip */
+.navbar-brand {
+  background: linear-gradient(to right, var(--win-title), var(--win-title-end));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.navbar-brand::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='7' height='7' fill='%23f25022'/%3E%3Crect x='9' width='7' height='7' fill='%237fba00'/%3E%3Crect y='9' width='7' height='7' fill='%2300a4ef'/%3E%3Crect x='9' y='9' width='7' height='7' fill='%23ffb900'/%3E%3C/svg%3E") no-repeat center;
+  background-size: contain;
+  flex-shrink: 0;
+}
+
+/* Menu items */
+.nav-links {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  padding: 0 4px;
+}
+
+.nav-links a,
+.nav-links .nav-give-btn {
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+  color: var(--win-text);
+  text-decoration: none;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  white-space: nowrap;
+  cursor: default;
+  background: transparent;
+  font-weight: 400;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.nav-links a:hover,
+.nav-links .nav-give-btn:hover {
+  border-top:    1px solid var(--win-light);
+  border-left:   1px solid var(--win-light);
+  border-right:  1px solid var(--win-dark);
+  border-bottom: 1px solid var(--win-dark);
+  background: var(--win-bg);
+  color: var(--win-text);
+  text-decoration: none;
+}
+
+.nav-give-btn {
+  margin-left: auto;
+  font-weight: 700 !important;
+  color: var(--win-title) !important;
+}
+
+/* ============================================================
+   HERO  — "Window" dialog look
+   ============================================================ */
+.hero-window {
+  margin: 12px 0;
+  background: var(--win-bg);
+  border-top:    2px solid var(--win-light);
+  border-left:   2px solid var(--win-light);
+  border-right:  2px solid var(--win-darker);
+  border-bottom: 2px solid var(--win-darker);
+  outline: 1px solid var(--win-dark);
+}
+
+.hero-titlebar {
+  background: linear-gradient(to right, var(--win-title), var(--win-title-end));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  gap: 6px;
+}
+
+.hero-titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-titlebar-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='%23ffe066' stroke='%23cc8800' stroke-width='1.5'/%3E%3Cpath d='M8 4v5M8 11v1' stroke='%23cc5500' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center;
+  background-size: contain;
+}
+
+.hero-titlebar-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.titlebar-btn {
+  width: 16px;
+  height: 14px;
+  font-size: 9px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--win-bg);
+  color: var(--win-text);
+  border-top:    1px solid var(--win-light);
+  border-left:   1px solid var(--win-light);
+  border-right:  1px solid var(--win-darker);
+  border-bottom: 1px solid var(--win-darker);
+  cursor: default;
+  font-family: 'Tahoma', Arial, sans-serif;
+  font-weight: 700;
+  padding: 0;
+}
+
+.hero-body {
+  position: relative;
+  height: 320px;
+  overflow: hidden;
+}
+
+.hero-body img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.9) contrast(0.95);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 128, 0.45);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 16px;
+  color: #fff;
+}
+
+.hero-overlay h1 {
+  font-size: 26px;
+  color: #fff;
+  text-shadow: 1px 1px 0 #000;
+  margin-bottom: 8px;
+}
+
+.hero-overlay h3 {
+  font-size: 14px;
+  color: #dde;
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+
+/* ============================================================
+   WIN BUTTON
+   ============================================================ */
+.win-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 75px;
+  padding: 4px 16px;
+  font-size: 11px;
+  font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+  font-weight: 400;
+  background: var(--win-bg);
+  color: var(--win-text);
+  border-top:    2px solid var(--win-light);
+  border-left:   2px solid var(--win-light);
+  border-right:  2px solid var(--win-darker);
+  border-bottom: 2px solid var(--win-darker);
+  outline: 1px solid var(--win-dark);
+  cursor: default;
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+.win-btn:hover {
+  background: #e0ddd4;
+  color: var(--win-text);
+  text-decoration: none;
+}
+
+.win-btn:active {
+  border-top:    2px solid var(--win-darker);
+  border-left:   2px solid var(--win-darker);
+  border-right:  2px solid var(--win-light);
+  border-bottom: 2px solid var(--win-light);
+}
+
+.win-btn-primary {
+  font-weight: 700;
+  border: 2px solid var(--win-title);
+  outline: 2px solid var(--win-bg);
+}
+
+/* ============================================================
+   SECTIONS — GroupBox style
+   ============================================================ */
+.groupbox {
+  border: 2px groove var(--win-dark);
+  padding: 16px 16px 12px;
+  margin-bottom: 12px;
+  background: var(--win-bg);
+  position: relative;
+}
+
+.groupbox-label {
+  position: absolute;
+  top: -9px;
+  left: 10px;
+  background: var(--win-bg);
+  padding: 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* inner "inset" display area */
+.inset-box {
+  background: var(--win-inset-bg);
+  border-top:    2px solid var(--win-dark);
+  border-left:   2px solid var(--win-dark);
+  border-right:  2px solid var(--win-light);
+  border-bottom: 2px solid var(--win-light);
+  padding: 10px 12px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* Schedule list */
+.schedule-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.schedule-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-bottom: 1px solid #c8c5be;
+  font-size: 11px;
+}
+.schedule-list li:last-child { border-bottom: none; }
+
+.schedule-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Status bar ── */
+.statusbar {
+  background: var(--win-bg);
+  border-top: 2px solid var(--win-dark);
+  padding: 2px 8px;
+  font-size: 10px;
+  display: flex;
+  gap: 2px;
+}
+.statusbar-pane {
+  border-top:   1px solid var(--win-dark);
+  border-left:  1px solid var(--win-dark);
+  border-right: 1px solid var(--win-light);
+  border-bottom:1px solid var(--win-light);
+  padding: 1px 8px;
+  flex: 1;
+}
+
+/* ============================================================
+   FOOTER — taskbar style
+   ============================================================ */
+.footer {
+  background: var(--win-bg);
+  border-top: 2px solid var(--win-light);
+  border-bottom: 2px solid var(--win-darker);
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--win-text);
+}
+
+.footer-start-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--win-bg);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px 3px 6px;
+  border-top:    2px solid var(--win-light);
+  border-left:   2px solid var(--win-light);
+  border-right:  2px solid var(--win-darker);
+  border-bottom: 2px solid var(--win-darker);
+  outline: 1px solid var(--win-dark);
+}
+
+.footer-clock {
+  border-top:   1px solid var(--win-dark);
+  border-left:  1px solid var(--win-dark);
+  border-right: 1px solid var(--win-light);
+  border-bottom:1px solid var(--win-light);
+  padding: 2px 8px;
+  font-size: 10px;
+}
+
+/* ============================================================
+   PROGRESS BAR  (decorative)
+   ============================================================ */
+.win-progress {
+  height: 16px;
+  background: var(--win-inset-bg);
+  border-top:    1px solid var(--win-dark);
+  border-left:   1px solid var(--win-dark);
+  border-right:  1px solid var(--win-light);
+  border-bottom: 1px solid var(--win-light);
+  overflow: hidden;
+}
+.win-progress-fill {
+  height: 100%;
+  background: var(--win-title);
+  width: 65%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 4px;
+  color: #fff;
+  font-size: 9px;
+}
+
+/* ============================================================
+   PAGE TITLE BAR  (sub-window heading)
+   ============================================================ */
+.page-titlebar {
+  background: linear-gradient(to right, var(--win-title), var(--win-title-end));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  user-select: none;
+}
+.page-titlebar-icon {
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================================
+   WIN TABLE  (Explorer list view)
+   ============================================================ */
+.win-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.win-table thead th {
+  background: var(--win-bg);
+  border-right:  1px solid var(--win-dark);
+  border-bottom: 2px solid var(--win-dark);
+  border-top:    1px solid var(--win-light);
+  border-left:   1px solid var(--win-light);
+  padding: 3px 8px;
+  text-align: left;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.win-table tbody td {
+  padding: 3px 8px;
+  border-bottom: 1px solid #ddd;
+  vertical-align: middle;
+}
+.win-table tbody tr:nth-child(even) { background: #f0eee8; }
+.win-table tbody tr:hover { background: #000080; color: #fff; }
+.win-table tbody tr:hover td { color: #fff; }
+
+/* ============================================================
+   WIN CHECKLIST
+   ============================================================ */
+.win-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.win-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-bottom: 1px solid #c8c5be;
+}
+.win-checklist li:last-child { border-bottom: none; }
+
+/* ============================================================
+   LEADERSHIP CARD
+   ============================================================ */
+.leadership-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 8px;
+  background: var(--win-bg);
+  border-top:    1px solid var(--win-light);
+  border-left:   1px solid var(--win-light);
+  border-right:  1px solid var(--win-dark);
+  border-bottom: 1px solid var(--win-dark);
+}
+.leadership-avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-top:   1px solid var(--win-dark);
+  border-left:  1px solid var(--win-dark);
+  border-right: 1px solid var(--win-light);
+  border-bottom:1px solid var(--win-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #c8c5be;
+}
+
+/* ============================================================
+   WIN FORM  (dialog-style inputs)
+   ============================================================ */
+.win-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 480px;
+}
+.win-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.win-field--column {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
+}
+.win-label {
+  font-size: 11px;
+  min-width: 56px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.win-field--column .win-label {
+  text-align: left;
+  min-width: unset;
+}
+.win-input {
+  flex: 1;
+  width: 100%;
+  font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+  font-size: 11px;
+  padding: 3px 5px;
+  background: var(--win-inset-bg);
+  color: var(--win-text);
+  border-top:    2px solid var(--win-dark);
+  border-left:   2px solid var(--win-dark);
+  border-right:  2px solid var(--win-light);
+  border-bottom: 2px solid var(--win-light);
+  outline: none;
+}
+.win-input:focus {
+  outline: 1px dotted var(--win-title);
+  outline-offset: 1px;
+}
+.win-textarea {
+  resize: vertical;
+  width: 100%;
+}
+.win-form-actions {
+  display: flex;
+  gap: 6px;
+  padding-top: 4px;
+}
+.win-error {
+  font-size: 11px;
+  color: #cc0000;
+  font-weight: 700;
+  padding: 4px 6px;
+  background: #fff0f0;
+  border: 1px solid #cc0000;
+}
+
+/* ============================================================
+   WIN DIALOG  (modal-style success box)
+   ============================================================ */
+.win-dialog {
+  border-top:    2px solid var(--win-light);
+  border-left:   2px solid var(--win-light);
+  border-right:  2px solid var(--win-darker);
+  border-bottom: 2px solid var(--win-darker);
+  outline: 1px solid var(--win-dark);
+  background: var(--win-bg);
+  max-width: 360px;
+  margin-bottom: 12px;
+}
+.win-dialog-titlebar {
+  background: linear-gradient(to right, var(--win-title), var(--win-title-end));
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.win-dialog-body {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+}
+.win-dialog-footer {
+  padding: 6px 10px 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 600px) {
+  .hero-body { height: 200px; }
+  .hero-overlay h1 { font-size: 18px; }
+  .navbar-brand { font-size: 11px; padding: 5px 8px; }
+  /* collapse services two-column to one */
+  .services-grid { grid-template-columns: 1fr !important; }
+  .win-form { max-width: 100%; }
+  .footer { flex-direction: column; align-items: flex-start; gap: 6px; }
 }

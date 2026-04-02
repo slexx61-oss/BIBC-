@@ -1,186 +1,157 @@
-// Importing useState hook from React
-// useState allows us to store and update data inside the component
-import { useState } from "react";
+import { useState } from 'react';
 
-// Contact component
 function Contact() {
-
-  // -----------------------------
-  // STATE VARIABLES
-  // -----------------------------
-
-  // Stores the value typed into the Name input field
-  const [name, setName] = useState("");
-
-  // Stores the value typed into the Email input field
-  const [email, setEmail] = useState("");
-
-  // Stores the value typed into the Message textarea
-  const [message, setMessage] = useState("");
-
-  // Tracks whether the form has been successfully submitted
-  // Used for conditional rendering of the success message
+  const [name,      setName]      = useState('');
+  const [email,     setEmail]     = useState('');
+  const [message,   setMessage]   = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading,   setLoading]   = useState(false);
+  const [error,     setError]     = useState('');
 
-  //Tracks if request is still in progress
-  const [loading, setLoading] = useState(false);
-
-  //Stores error message
-  const [error, setError] = useState("");
-
-
-  // -----------------------------
-  // EVENT HANDLER
-  // -----------------------------
-
-  // This function runs when the form is submitted
   async function handleSubmit(e) {
-
-    // Prevents the default browser behavior (page refresh)
     e.preventDefault();
-
-    //Reset error before new request 
-    setError("");
-
-    //Set loading to true
+    setError('');
     setLoading(true);
 
-    //Create object containing form data
-    const formData = {
-      name, 
-      email,
-      message
-    };
+    const formData = { name, email, message };
 
     try {
-      //Send POST request to backend server 
-      const response = await fetch ("https://bibc-backend.onrender.com/",{
-
-        //HTTP method
-        method: "POST",
-        //Tell server we are sending JSON
-        headers:{
-          "Content-Type": "application/json"
-        },
-
-        //Convert JS object to JSON string
-        body: JSON.stringify(formData)
+      const response = await fetch('https://bibc-backend.onrender.com/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
- 
-      //Const server response into JS object
       const data = await response.json();
-
-      //If server confirms success 
-      if (data.success){
-        //Show confirmation message
+      if (data.success) {
         setSubmitted(true);
-        //Clear form inputs
-        setName("");
-        setEmail ("");
-        setMessage ("");
-        
+        setName('');
+        setEmail('');
+        setMessage('');
       }
+    } catch (err) {
+      console.error('Error sending form', err);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-      catch (error){
-        //If something fails, print error 
-        console.error("Error sending form", error);
-        //Show error message to user
-        setError("Something went wrong. Please try again.");
-      }
-      finally{
-        //Always stop loading wheher on success or error
-        setLoading (false);
-      }
-
-    }
-
-
-  // -----------------------------
-  // JSX (UI STRUCTURE)
-  // -----------------------------
+  }
 
   return (
-    <>
-      {/* Intro Section */}
-      <section>
-        <h1>Contact Us</h1>
+    <div>
 
+      {/* Page title bar */}
+      <div className="page-titlebar" role="heading" aria-level="1">
+        <span className="page-titlebar-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="1" y="3" width="14" height="10" rx="1" fill="#d4d0c8" stroke="#808080" strokeWidth="1"/>
+            <polyline points="1,3 8,9 15,3" stroke="#000080" strokeWidth="1.2" fill="none"/>
+          </svg>
+        </span>
+        Contact Us
+      </div>
+
+      {/* Intro */}
+      <section className="groupbox" aria-labelledby="contact-intro">
+        <span className="groupbox-label" id="contact-intro">Get in Touch</span>
         <p>
-          We’d love to hear from you. Whether you have questions,
-          need prayer, or want to learn more about our church,
-          feel free to reach out using the form below.
+          We&apos;d love to hear from you. Whether you have questions, need prayer, or want to
+          learn more about our church, feel free to reach out using the form below.
         </p>
-
-        {/* Conditional Rendering:
-            This message only appears if submitted === true */}
-        {submitted && (
-          <p className = "form-success">
-            Thank you. Your message has been received.
-          </p>
-        )}
       </section>
 
+      {/* Success dialog */}
+      {submitted && (
+        <div className="win-dialog" role="status" aria-live="polite">
+          <div className="win-dialog-titlebar">
+            <span>Message Sent</span>
+            <button
+              className="titlebar-btn"
+              onClick={() => setSubmitted(false)}
+              aria-label="Close success message"
+            >✕</button>
+          </div>
+          <div className="win-dialog-body">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
+              <circle cx="16" cy="16" r="14" fill="#000080"/>
+              <polyline points="9,16 14,21 23,11" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <p>Thank you, <strong>{name || 'friend'}</strong>. Your message has been received.</p>
+          </div>
+          <div className="win-dialog-footer">
+            <button className="win-btn" onClick={() => setSubmitted(false)}>OK</button>
+          </div>
+        </div>
+      )}
 
-      {/* Form Section */}
-      <section>
+      {/* Form */}
+      <section className="groupbox" aria-labelledby="form-heading">
+        <span className="groupbox-label" id="form-heading">New Message</span>
 
-        {/* onSubmit triggers handleSubmit function */}
-        <form className="contact-form" onSubmit={handleSubmit}>
+        <form className="win-form" onSubmit={handleSubmit} noValidate>
 
-          {/* Name Field */}
-          <div>
-            <label>Name</label>
+          <div className="win-field">
+            <label className="win-label" htmlFor="contact-name">Name:</label>
             <input
+              id="contact-name"
+              className="win-input"
               type="text"
-
-              // Controlled input:
-              // value is linked to state
               value={name}
-
-              // Updates state every time user types
               onChange={(e) => setName(e.target.value)}
-
               required
+              autoComplete="name"
             />
           </div>
 
-
-          {/* Email Field */}
-          <div>
-            <label>Email</label>
+          <div className="win-field">
+            <label className="win-label" htmlFor="contact-email">Email:</label>
             <input
+              id="contact-email"
+              className="win-input"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
             />
           </div>
 
-
-          {/* Message Field */}
-          <div>
-            <label>Message</label>
+          <div className="win-field win-field--column">
+            <label className="win-label" htmlFor="contact-message">Message:</label>
             <textarea
-              rows="2"
+              id="contact-message"
+              className="win-input win-textarea"
+              rows={5}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               required
             />
           </div>
 
+          {error && (
+            <p className="win-error" role="alert">{error}</p>
+          )}
 
-          {/* Submit Button */}
-          <button type="submit" className="primary-btn" disabled ={loading}>
-            {/* Show dynamic text based on loading */}
-            {loading ? "Sending..." : "Send message"}
-          </button>
+          <div className="win-form-actions">
+            <button
+              type="submit"
+              className="win-btn win-btn-primary"
+              disabled={loading}
+            >
+              {loading ? 'Sending…' : 'Send Message'}
+            </button>
+            <button
+              type="reset"
+              className="win-btn"
+              onClick={() => { setName(''); setEmail(''); setMessage(''); setError(''); }}
+            >
+              Clear
+            </button>
+          </div>
 
         </form>
-
-        {error && <p className = "form-error">error</p>}
       </section>
-    </>
+
+    </div>
   );
 }
 
